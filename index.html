@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bouger en famille – Questionnaire</title>
+<meta name="description" content="Aidez-nous à créer l'accompagnement idéal pour bouger en famille, dans la nature, sans compétition.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e8; --card:#fffdf8; --ink:#1f2a22; --muted:#5d6b61; --line:#ddd6c6;
+  --forest:#2f5d3a; --forest-d:#24482d; --moss:#e3ecd9; --sun:#e8a33d; --err:#b3412e;
+  --r:14px; --shadow:0 1px 2px rgba(31,42,34,.06),0 8px 24px rgba(31,42,34,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.2;margin:0}
+.wrap{max-width:680px;margin:0 auto;padding:24px 16px 64px}
+header.top{display:flex;align-items:center;gap:10px;margin-bottom:20px;color:var(--forest);font-weight:600}
+header.top svg{flex:none}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 14px;margin-bottom:8px}
+.progress .meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--forest);border-radius:99px;transition:width .35s ease}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:28px 22px}
+@media(min-width:560px){.card{padding:36px 36px}}
+.hero h1{font-size:clamp(26px,6vw,36px);margin-bottom:14px}
+.hero p{color:var(--muted);margin:0 0 12px}
+.pill{display:inline-flex;gap:6px;align-items:center;background:var(--moss);color:var(--forest-d);font-size:13px;font-weight:600;padding:5px 11px;border-radius:99px;margin-bottom:16px}
+.step-title{font-size:24px;margin-bottom:4px}
+.step-intro{color:var(--muted);margin:0 0 8px}
+.q{padding:22px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0}
+.q[hidden]{display:none}
+.q label.qlabel,.q legend{display:block;font-weight:600;font-size:17px;margin-bottom:4px;padding:0}
+.q .num{color:var(--forest);font-family:Fraunces,serif;margin-right:6px}
+.q .req{color:var(--err);margin-left:3px}
+.hint{font-size:14px;color:var(--muted);margin:0 0 12px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+input[type=text],input[type=email],textarea{width:100%;font:inherit;color:inherit;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;transition:border-color .15s}
+textarea{min-height:110px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 3px var(--moss)}
+.opts{display:grid;gap:8px;margin-top:10px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.opt span{display:flex;align-items:center;gap:12px;min-height:50px;padding:11px 14px;background:#fff;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;transition:all .15s}
+.opt span::before{content:"";flex:none;width:20px;height:20px;border:2px solid #b9b29f;background:#fff;transition:all .15s}
+.opt input[type=radio]+span::before{border-radius:50%}
+.opt input[type=checkbox]+span::before{border-radius:5px}
+.opt input:checked+span{border-color:var(--forest);background:var(--moss)}
+.opt input:checked+span::before{border-color:var(--forest);background:var(--forest);box-shadow:inset 0 0 0 3px #fff}
+.opt input:focus-visible+span{box-shadow:0 0 0 3px var(--moss);border-color:var(--forest)}
+.other{margin-top:8px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+@media(min-width:520px){.scale{grid-template-columns:repeat(10,1fr)}}
+.scale .opt span{justify-content:center;min-height:46px;padding:8px 0;font-weight:600}
+.scale .opt span::before{display:none}
+.scale-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:8px;gap:12px}
+.scale-ends span:last-child{text-align:right}
+.rank{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.rank li{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 8px 8px 12px;cursor:grab;user-select:none;transition:background .15s,border-color .15s}
+.rank li.dragging{opacity:.5}
+.rank li.over{border-color:var(--forest);background:var(--moss)}
+.rank .pos{flex:none;width:28px;height:28px;border-radius:50%;background:var(--forest);color:#fff;display:grid;place-items:center;font-weight:600;font-size:14px}
+.rank .txt{flex:1}
+.rank .mv{display:flex;gap:4px}
+.rank button{width:38px;height:38px;border:1.5px solid var(--line);background:var(--card);border-radius:8px;cursor:pointer;font-size:16px;color:var(--ink)}
+.rank button:disabled{opacity:.3;cursor:default}
+.rank button:not(:disabled):hover{border-color:var(--forest)}
+.box{background:var(--moss);border-radius:10px;padding:14px 16px;margin:10px 0 4px}
+.box ul{margin:6px 0 0;padding-left:20px}
+.err{color:var(--err);font-size:14px;margin-top:8px;display:none}
+.q.invalid .err{display:block}
+.q.invalid input[type=text],.q.invalid input[type=email],.q.invalid .opt span{border-color:var(--err)}
+.nav{display:flex;gap:10px;justify-content:space-between;margin-top:24px}
+.btn{font:inherit;font-weight:600;border-radius:99px;padding:14px 26px;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
+.btn.primary{background:var(--forest);color:#fff;margin-left:auto}
+.btn.primary:hover{background:var(--forest-d)}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--forest)}
+.btn:disabled{opacity:.6;cursor:wait}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted);margin-top:12px;cursor:pointer}
+.consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--forest);flex:none}
+.legal{font-size:12.5px;color:var(--muted);margin-top:28px;line-height:1.5}
+.legal a{color:inherit}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.done{text-align:center}
+.done .ico{width:64px;height:64px;border-radius:50%;background:var(--moss);display:grid;place-items:center;margin:0 auto 18px}
+.done h2{font-size:30px;margin-bottom:12px}
+.done p{color:var(--muted)}
+.done .rdv{background:var(--forest);color:#fff;border-radius:var(--r);padding:20px;margin-top:22px}
+.done .rdv strong{display:block;font-family:Fraunces,serif;font-size:22px;margin-bottom:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 4 26h24L16 3Z" fill="#2f5d3a"/><path d="M16 12l-6 14h12l-6-14Z" fill="#e3ecd9"/><circle cx="25" cy="8" r="3" fill="#e8a33d"/></svg>
+    <span>Bouger en famille</span>
+  </header>
+
+  <div class="progress" id="progress" hidden>
+    <div class="meta"><span id="pStep"></span><span id="pName"></span></div>
+    <div class="bar"><i id="pBar"></i></div>
+  </div>
+
+  <main id="app" aria-live="polite"></main>
+
+  <p class="legal" id="legal"></p>
+</div>
+
+<script>
+/* ============ CONFIGURATION — à compléter ============ */
+const CONFIG = {
+  // URL de l'application Web Google Apps Script (se termine par /exec)
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbycnqzDunIW2d9XOODOfSjHFxYqP0rYIi-KpV1u8CerTOutOIdr27pHy69L5CKfbJ4l/exec",
+  // Responsable du traitement et contact affichés dans la mention RGPD
+  RESPONSABLE: "CFEN",
+  CONTACT: "amaury@cfen.eu",
+  // Durée de conservation des réponses
+  CONSERVATION: "1 an à compter de votre dernier contact",
+  WEBINAIRE: "11 novembre"
+};
+/* ===================================================== */
+
+const KIDS = ["En couple avec enfant(s)", "Parent solo avec enfant(s)"];
+const hasKids = a => KIDS.includes(a.q03_situation) || a.q03_situation === "Autre";
+
+const STEPS = [
+  { name: "Qui êtes-vous ?", qs: [
+    { id:"q01_prenom", n:1, label:"Quel est votre prénom ?", type:"text", required:true },
+    { id:"q02_age", n:2, label:"Quel est votre âge ?", type:"radio", required:true,
+      options:["25-34 ans","35-44 ans","45-54 ans","55-64 ans","65 ans et plus"] },
+    { id:"q03_situation", n:3, label:"Quelle est votre situation familiale ?", type:"radio", required:true, other:true,
+      options:["En couple avec enfant(s)","Parent solo avec enfant(s)","En couple sans enfant","Célibataire"] },
+    { id:"q04_age_enfants", n:4, label:"Quel âge ont vos enfants ?", type:"text", hint:"Par exemple : 5 ans, 8 ans, 12 ans", showIf:hasKids },
+    { id:"q05_lieu", n:5, label:"Où habitez-vous ?", type:"radio", required:true, other:true,
+      options:["Grande ville (Paris, Lyon, Marseille…)","Ville moyenne","Banlieue","Zone rurale"] }
+  ]},
+  { name: "Pourquoi êtes-vous ici ?", qs: [
+    { id:"q06_pourquoi", n:6, label:"Pourquoi avez-vous accepté de répondre à ce questionnaire ?", type:"textarea" },
+    { id:"q07_urgence", n:7, label:"Sur une échelle de 1 à 10, à quel point est-ce urgent pour vous de changer cette situation ?", type:"scale", required:true,
+      ends:["1 · Je peux attendre","10 · C'est critique, je dois agir maintenant"] }
+  ]},
+  { name: "Votre situation actuelle", qs: [
+    { id:"q08_frequence", n:8, label:"À quelle fréquence faites-vous actuellement une activité physique en famille, en extérieur ?", type:"radio", required:true,
+      options:["Jamais","Rarement (1 fois par mois ou moins)","Occasionnellement (2-3 fois par mois)","Régulièrement (1 fois par semaine)","Très régulièrement (plusieurs fois par semaine)"] },
+    { id:"q09_freins", n:9, label:"Qu'est-ce qui vous empêche concrètement de bouger plus en famille ?", type:"checkbox", required:true, other:true, hint:"Plusieurs réponses possibles",
+      options:["Manque de temps","Météo (pluie, froid, canicule…)","Manque d'idées d'activités","Manque de motivation","Pas d'espace adapté près de chez moi","Fatigue","Contraintes professionnelles"] },
+    { id:"q10_poids_emotionnel", n:10, label:"Quand vous pensez à cette situation, qu'est-ce qui vous pèse le plus émotionnellement ?", type:"textarea",
+      hint:"Par exemple : culpabilité de ne pas transmettre le goût de bouger, frustration de voir mes enfants toujours sur les écrans, peur qu'ils deviennent sédentaires comme moi…" },
+    { id:"q11_forme_parent", n:11, label:"Comment vous sentez-vous physiquement au quotidien ?", type:"checkbox", required:true, other:true, hint:"Plusieurs réponses possibles",
+      options:["Fatigué(e), sans énergie","Douleurs (dos, genoux, articulations…)","Essoufflé(e) rapidement","Raide, manque de souplesse","En forme, mais je pourrais faire mieux"] },
+    { id:"q12_forme_enfants", n:12, label:"Et vos enfants, comment les décririez-vous physiquement ?", type:"checkbox", other:true, hint:"Plusieurs réponses possibles", showIf:hasKids,
+      options:["Très actifs, toujours en mouvement","Actifs mais surtout en intérieur","Peu actifs, préfèrent les écrans","Manquent de confiance en eux / ne savent pas jouer dehors","Ont des difficultés physiques (coordination, endurance…)"] },
+    { id:"q13_deja_essaye", n:13, label:"Avez-vous déjà essayé de bouger plus en famille ? Si oui, qu'est-ce qui n'a pas marché ?", type:"textarea" },
+    { id:"q14_pas_tenu", n:14, label:"Qu'est-ce qui vous a empêché de tenir dans le temps ?", type:"checkbox", other:true, hint:"Plusieurs réponses possibles",
+      options:["Manque de régularité","Activités trop compliquées ou ennuyeuses","Météo décourageante","Enfants pas motivés","Manque de structure / de plan clair"] },
+    { id:"q15_croyances", n:15, label:"Qu'est-ce qui vous fait penser que ça ne marchera pas pour vous ou votre famille ?", type:"textarea",
+      hint:"Par exemple : « C'est trop tard, on a pris de mauvaises habitudes », « Mes enfants ne suivront jamais », « Je ne suis pas sportif »…" }
+  ]},
+  { name: "Ce que vous cherchez", qs: [
+    { id:"q16_une_chose", n:16, label:"Si vous pouviez changer une seule chose dans votre vie de famille, ce serait quoi ?", type:"textarea" },
+    { id:"q17_journee_ideale", n:17, label:"Imaginez : dans 3 mois, tout va mieux. Vous bougez régulièrement en famille, dans la nature, et vous y prenez du plaisir. Décrivez cette journée idéale.", type:"textarea" },
+    { id:"q18_quel_parent", n:18, label:"Si cette transformation réussit, qu'est-ce que ça change pour vous en tant que parent ? Quel genre de parent devenez-vous ?", type:"textarea",
+      hint:"Par exemple : « Je deviens le parent qui transmet le goût de bouger », « Je crée des souvenirs forts avec mes enfants »…" },
+    { id:"q19_motivations", n:19, label:"Qu'est-ce qui vous motive le plus dans l'idée de bouger en famille ?", type:"checkbox", required:true, other:true, hint:"Plusieurs réponses possibles",
+      options:["Améliorer ma santé et celle de mes enfants","Passer du temps de qualité ensemble","Sortir de la routine métro-boulot-dodo","Transmettre le goût de bouger à mes enfants","Créer des souvenirs forts en famille","Reconnecter avec la nature","Montrer l'exemple à mes enfants"] },
+    { id:"q20_priorites", n:20, label:"Si un programme existait pour vous aider, qu'est-ce qui serait le plus important pour vous ?", type:"rank",
+      hint:"Classez du plus important (1) au moins important (5) : faites glisser les lignes ou utilisez les flèches.",
+      options:[
+        {k:"seances_pretes", t:"Des séances prêtes à l'emploi"},
+        {k:"appli", t:"Une appli qui crée les séances"},
+        {k:"echanges_familles", t:"Échanger avec d'autres familles"},
+        {k:"exercices_hebdo", t:"Des exercices pratiques chaque semaine"},
+        {k:"rencontres", t:"Des rencontres motivantes (stages, journées…)"}
+      ] }
+  ]},
+  { name: "Votre budget et vos attentes", qs: [
+    { id:"q21_budget", n:21, label:"Combien seriez-vous prêt(e) à investir pour retrouver une vraie vie active en famille ?", type:"radio", required:true,
+      intro:'<div class="box"><strong>Pour un programme complet de 3 mois comprenant :</strong><ul><li>Des leçons vidéo hebdomadaires</li><li>10 séances clé en main à faire en famille</li><li>Du coaching de groupe</li><li>Une application mobile</li><li>Une communauté de familles</li></ul></div>',
+      options:["Moins de 200 €","200 – 400 €","400 – 600 €","600 – 900 €","900 – 1 200 €","Plus de 1 200 €","Je ne sais pas","Ça ne m'intéresse pas"] },
+    { id:"q22_hebertisme", n:22, label:"Avez-vous déjà entendu parler de l'hébertisme (méthode d'éducation physique naturelle en extérieur) ?", type:"radio", required:true,
+      options:["Oui, je connais bien","Oui, j'en ai entendu parler","Non, jamais","Non, mais ça m'intrigue"] }
+  ]},
+  { name: "Pour finir", qs: [
+    { id:"q23_remarques", n:23, label:"Avez-vous des questions, des attentes particulières, ou quelque chose à ajouter ?", type:"textarea" },
+    { id:"q24_tenu_informe", n:24, label:"Souhaitez-vous être tenu(e) au courant de la sortie de ce programme ?", type:"radio", required:true,
+      options:["Oui, tenez-moi informé(e)","Non merci"] },
+    { id:"q24_email", n:null, label:"Votre adresse e-mail", type:"email", required:true, consent:true,
+      showIf:a => a.q24_tenu_informe === "Oui, tenez-moi informé(e)" }
+  ]}
+];
+
+/* ---------- état ---------- */
+const DRAFT_KEY = "questionnaire-famille-v1";
+let answers = {}, step = -1;
+try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); if (d) { answers = d.answers || {}; } } catch(e) {}
+const saveDraft = () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify({answers})); } catch(e) {} };
+const clearDraft = () => { try { localStorage.removeItem(DRAFT_KEY); } catch(e) {} };
+
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+document.getElementById("legal").innerHTML =
+  `Vos réponses sont collectées par le ${esc(CONFIG.RESPONSABLE)} uniquement pour concevoir ce programme d'accompagnement et, si vous le souhaitez, vous informer de sa sortie. ` +
+  `Elles ne sont ni vendues ni transmises à des tiers, et sont conservées ${esc(CONFIG.CONSERVATION)}. ` +
+  `Vous pouvez y accéder, les rectifier ou les faire supprimer à tout moment en écrivant à ${esc(CONFIG.CONTACT)}.`;
+
+/* ---------- rendu ---------- */
+function renderIntro() {
+  document.getElementById("progress").hidden = true;
+  const resume = Object.keys(answers).length > 0;
+  app.innerHTML = `
+  <section class="card hero">
+    <span class="pill">⏱ Environ 10 minutes</span>
+    <h1>Aidez-nous à créer l'accompagnement parfait pour votre famille</h1>
+    <p>Nous préparons un accompagnement pour aider les familles à bouger ensemble, dans la nature, sans compétition. Avant de le lancer, nous voulons vous entendre.</p>
+    <p>Il n'y a pas de bonne ou de mauvaise réponse : plus vous êtes sincère, plus le programme vous ressemblera.</p>
+    <div class="nav">
+      ${resume ? '<button class="btn ghost" id="restart">Recommencer</button>' : ''}
+      <button class="btn primary" id="start">${resume ? "Reprendre où j'en étais" : "Commencer"} →</button>
+    </div>
+  </section>`;
+  document.getElementById("start").onclick = () => go(0);
+  const r = document.getElementById("restart");
+  if (r) r.onclick = () => { answers = {}; clearDraft(); go(0); };
+}
+
+function qHTML(q) {
+  const v = answers[q.id];
+  const num = q.n ? `<span class="num">${q.n}.</span>` : "";
+  const req = q.required ? '<span class="req" aria-hidden="true">*</span>' : "";
+  const hint = q.hint ? `<p class="hint" id="${q.id}-h">${esc(q.hint)}</p>` : "";
+  const err = `<div class="err" role="alert">${q.type === "email" ? "Merci d'indiquer une adresse e-mail valide et de cocher la case." : "Merci de répondre à cette question."}</div>`;
+  let body = "";
+  if (q.type === "text" || q.type === "email") {
+    body = `<label class="qlabel" for="${q.id}">${num}${esc(q.label)}${req}</label>${hint}
+      <input type="${q.type}" id="${q.id}" data-k="${q.id}" value="${esc(v || "")}" ${q.type === "email" ? 'autocomplete="email" inputmode="email"' : 'autocomplete="given-name"'} ${q.hint ? `aria-describedby="${q.id}-h"` : ""}>`;
+    if (q.consent) body += `<label class="consent"><input type="checkbox" data-k="q24_consentement" ${answers.q24_consentement ? "checked" : ""}>
+      <span>J'accepte de recevoir des e-mails au sujet de ce programme et du webinaire. Je peux me désinscrire à tout moment.</span></label>`;
+    return `<div class="q" data-q="${q.id}">${body}${err}</div>`;
+  }
+  if (q.type === "textarea") {
+    body = `<label class="qlabel" for="${q.id}">${num}${esc(q.label)}${req}</label>${hint}
+      <textarea id="${q.id}" data-k="${q.id}" ${q.hint ? `aria-describedby="${q.id}-h"` : ""}>${esc(v || "")}</textarea>`;
+    return `<div class="q" data-q="${q.id}">${body}${err}</div>`;
+  }
+  if (q.type === "radio" || q.type === "checkbox") {
+    const sel = q.type === "checkbox" ? (v || []) : [v];
+    const opts = [...q.options, ...(q.other ? ["Autre"] : [])].map(o =>
+      `<label class="opt"><input type="${q.type}" name="${q.id}" value="${esc(o)}" ${sel.includes(o) ? "checked" : ""}><span>${esc(o === "Autre" ? "Autre…" : o)}</span></label>`).join("");
+    const otherOn = sel.includes("Autre");
+    const other = q.other ? `<input type="text" class="other" data-k="${q.id}_autre" placeholder="Précisez…" aria-label="Précisez" value="${esc(answers[q.id + "_autre"] || "")}" ${otherOn ? "" : "hidden"}>` : "";
+    return `<fieldset class="q" data-q="${q.id}"><legend>${num}${esc(q.label)}${req}</legend>${q.intro || ""}${hint}<div class="opts">${opts}</div>${other}${err}</fieldset>`;
+  }
+  if (q.type === "scale") {
+    const opts = Array.from({length:10}, (_, i) => i + 1).map(n =>
+      `<label class="opt"><input type="radio" name="${q.id}" value="${n}" ${String(v) === String(n) ? "checked" : ""}><span>${n}</span></label>`).join("");
+    return `<fieldset class="q" data-q="${q.id}"><legend>${num}${esc(q.label)}${req}</legend>
+      <div class="scale">${opts}</div><div class="scale-ends"><span>${esc(q.ends[0])}</span><span>${esc(q.ends[1])}</span></div>${err}</fieldset>`;
+  }
+  if (q.type === "rank") {
+    const order = Array.isArray(v) && v.length === q.options.length ? v : q.options.map(o => o.k);
+    answers[q.id] = order;
+    return `<fieldset class="q" data-q="${q.id}"><legend>${num}${esc(q.label)}</legend>${hint}<ol class="rank" data-rank="${q.id}"></ol>${err}</fieldset>`;
+  }
+}
+
+function renderRank(q) {
+  const ol = app.querySelector(`[data-rank="${q.id}"]`);
+  const order = answers[q.id];
+  const label = k => q.options.find(o => o.k === k).t;
+  ol.innerHTML = order.map((k, i) => `
+    <li draggable="true" data-k="${k}">
+      <span class="pos">${i + 1}</span><span class="txt">${esc(label(k))}</span>
+      <span class="mv">
+        <button type="button" data-dir="-1" aria-label="Monter « ${esc(label(k))} »" ${i === 0 ? "disabled" : ""}>↑</button>
+        <button type="button" data-dir="1" aria-label="Descendre « ${esc(label(k))} »" ${i === order.length - 1 ? "disabled" : ""}>↓</button>
+      </span>
+    </li>`).join("");
+  const move = (from, to) => {
+    const o = [...answers[q.id]]; const [x] = o.splice(from, 1); o.splice(to, 0, x);
+    answers[q.id] = o; saveDraft(); renderRank(q);
+  };
+  ol.querySelectorAll("button").forEach(b => b.onclick = e => {
+    const i = order.indexOf(b.closest("li").dataset.k), d = +b.dataset.dir;
+    move(i, i + d);
+    const nb = ol.querySelectorAll("li")[i + d]?.querySelector(`button[data-dir="${d}"]:not(:disabled)`) || ol.querySelectorAll("li")[i + d]?.querySelector("button:not(:disabled)");
+    nb?.focus();
+  });
+  let dragK = null;
+  ol.querySelectorAll("li").forEach(li => {
+    li.ondragstart = e => { dragK = li.dataset.k; li.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", dragK); } catch(_) {} };
+    li.ondragend = () => { li.classList.remove("dragging"); ol.querySelectorAll(".over").forEach(x => x.classList.remove("over")); };
+    li.ondragover = e => { e.preventDefault(); li.classList.add("over"); };
+    li.ondragleave = () => li.classList.remove("over");
+    li.ondrop = e => { e.preventDefault(); if (!dragK || dragK === li.dataset.k) return;
+      move(answers[q.id].indexOf(dragK), answers[q.id].indexOf(li.dataset.k)); };
+  });
+  // Glisser au doigt (mobile)
+  ol.querySelectorAll("li .txt, li .pos").forEach(h => {
+    h.addEventListener("touchstart", e => { dragK = h.closest("li").dataset.k; h.closest("li").classList.add("dragging"); }, {passive:true});
+    h.addEventListener("touchmove", e => {
+      e.preventDefault();
+      const t = e.touches[0], el = document.elementFromPoint(t.clientX, t.clientY)?.closest("li");
+      ol.querySelectorAll(".over").forEach(x => x.classList.remove("over"));
+      if (el && el.parentNode === ol) el.classList.add("over");
+    }, {passive:false});
+    h.addEventListener("touchend", e => {
+      const t = e.changedTouches[0], el = document.elementFromPoint(t.clientX, t.clientY)?.closest("li");
+      if (el && el.parentNode === ol && el.dataset.k !== dragK) move(answers[q.id].indexOf(dragK), answers[q.id].indexOf(el.dataset.k));
+      else renderRank(q);
+      dragK = null;
+    });
+  });
+}
+
+function refreshVisibility() {
+  STEPS[step].qs.forEach(q => {
+    if (!q.showIf) return;
+    const el = app.querySelector(`[data-q="${q.id}"]`);
+    if (el) el.hidden = !q.showIf(answers);
+  });
+}
+
+function renderStep() {
+  const s = STEPS[step];
+  const p = document.getElementById("progress"); p.hidden = false;
+  document.getElementById("pStep").textContent = `Étape ${step + 1} sur ${STEPS.length}`;
+  document.getElementById("pName").textContent = s.name;
+  document.getElementById("pBar").style.width = `${(step / STEPS.length) * 100}%`;
+  const last = step === STEPS.length - 1;
+  app.innerHTML = `
+  <form class="card" id="f" novalidate>
+    <h2 class="step-title">${esc(s.name)}</h2>
+    <p class="step-intro">Les questions marquées <span class="req">*</span> sont obligatoires.</p>
+    ${s.qs.map(qHTML).join("")}
+    ${last ? '<div class="hp" aria-hidden="true"><label>Ne pas remplir <input type="text" tabindex="-1" autocomplete="off" data-k="_hp"></label></div>' : ""}
+    <div class="nav">
+      <button type="button" class="btn ghost" id="back">← Retour</button>
+      <button type="submit" class="btn primary" id="next">${last ? "Envoyer mes réponses" : "Continuer →"}</button>
+    </div>
+  </form>`;
+  s.qs.filter(q => q.type === "rank").forEach(renderRank);
+  refreshVisibility();
+
+  const f = document.getElementById("f");
+  f.addEventListener("input", onInput);
+  f.addEventListener("change", onInput);
+  document.getElementById("back").onclick = () => go(step - 1);
+  f.onsubmit = e => {
+    e.preventDefault();
+    if (!validate()) return;
+    if (last) submit(); else go(step + 1);
+  };
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function onInput(e) {
+  const t = e.target;
+  if (t.dataset.k) {
+    answers[t.dataset.k] = t.type === "checkbox" ? t.checked : t.value;
+  } else if (t.name) {
+    if (t.type === "checkbox") {
+      answers[t.name] = [...app.querySelectorAll(`input[name="${t.name}"]:checked`)].map(i => i.value);
+    } else {
+      answers[t.name] = t.value;
+    }
+    const sel = t.type === "checkbox" ? answers[t.name] : [answers[t.name]];
+    const other = app.querySelector(`[data-k="${t.name}_autre"]`);
+    if (other) { other.hidden = !sel.includes("Autre"); if (!other.hidden && e.type === "change" && t.value === "Autre" && t.checked) other.focus(); }
+  }
+  const qEl = t.closest(".q"); if (qEl) qEl.classList.remove("invalid");
+  refreshVisibility();
+  saveDraft();
+}
+
+function isVisible(q) { return !q.showIf || q.showIf(answers); }
+
+function validate() {
+  let first = null;
+  STEPS[step].qs.forEach(q => {
+    if (!isVisible(q)) return;
+    const el = app.querySelector(`[data-q="${q.id}"]`);
+    const v = answers[q.id];
+    let ok = true;
+    if (q.required) {
+      if (q.type === "checkbox") ok = Array.isArray(v) && v.length > 0;
+      else ok = v != null && String(v).trim() !== "";
+    }
+    if (ok && q.type === "email") ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v).trim()) && answers.q24_consentement === true;
+    el.classList.toggle("invalid", !ok);
+    if (!ok && !first) first = el;
+  });
+  if (first) { first.scrollIntoView({behavior:"smooth", block:"center"}); first.querySelector("input,textarea")?.focus({preventScroll:true}); }
+  return !first;
+}
+
+function go(i) {
+  if (i < 0) { step = -1; renderIntro(); return; }
+  step = i; renderStep();
+}
+
+/* ---------- envoi ---------- */
+function buildPayload() {
+  const out = {};
+  STEPS.forEach(s => s.qs.forEach(q => {
+    const vis = isVisible(q);
+    const v = vis ? answers[q.id] : "";
+    if (q.type === "rank") {
+      const order = answers[q.id] || q.options.map(o => o.k);
+      q.options.forEach(o => { out[`q20_rang_${o.k}`] = order.indexOf(o.k) + 1; });
+      return;
+    }
+    out[q.id] = Array.isArray(v) ? v.join(" | ") : (v ?? "");
+    if (q.other) {
+      const sel = Array.isArray(v) ? v : [v];
+      out[q.id + "_autre"] = vis && sel.includes("Autre") ? (answers[q.id + "_autre"] || "") : "";
+    }
+    if (q.consent) out.q24_consentement = vis && answers.q24_consentement ? "Oui" : "Non";
+  }));
+  out._hp = answers._hp || "";
+  out.source = location.hostname || "local";
+  out.appareil = /Mobi|Android/i.test(navigator.userAgent) ? "mobile" : "ordinateur";
+  return out;
+}
+
+async function submit() {
+  const btn = document.getElementById("next");
+  btn.disabled = true; btn.textContent = "Envoi en cours…";
+  try {
+    if (!/^https:\/\/script\.google\.com\//.test(CONFIG.SCRIPT_URL)) throw new Error("SCRIPT_URL non configurée");
+    await fetch(CONFIG.SCRIPT_URL, {
+      method: "POST", mode: "no-cors",
+      headers: {"Content-Type": "text/plain;charset=utf-8"},
+      body: JSON.stringify(buildPayload())
+    });
+    clearDraft();
+    renderDone();
+  } catch (err) {
+    console.error(err);
+    btn.disabled = false; btn.textContent = "Réessayer l'envoi";
+    let m = app.querySelector(".send-err");
+    if (!m) { m = document.createElement("p"); m.className = "err send-err"; m.style.display = "block"; btn.closest(".nav").before(m); }
+    m.textContent = "Oups, l'envoi n'a pas fonctionné. Vérifiez votre connexion et réessayez : vos réponses sont conservées sur cet appareil.";
+  }
+}
+
+function renderDone() {
+  document.getElementById("pBar").style.width = "100%";
+  document.getElementById("pStep").textContent = "Terminé";
+  document.getElementById("pName").textContent = "";
+  const prenom = (answers.q01_prenom || "").trim();
+  app.innerHTML = `
+  <section class="card done">
+    <div class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2f5d3a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2>Merci${prenom ? " " + esc(prenom) : ""} !</h2>
+    <p>Vos réponses vont nous aider à créer quelque chose qui change vraiment la vie des familles.</p>
+    <div class="rdv"><strong>Rendez-vous le ${esc(CONFIG.WEBINAIRE)}</strong>pour le webinaire gratuit : vous allez adorer.</div>
+  </section>`;
+  answers = {};
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+renderIntro();
+</script>
+</body>
+</html>
