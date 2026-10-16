@@ -134,7 +134,7 @@ const STEPS = [
   { name: "Qui êtes-vous ?", qs: [
     { id:"q01_prenom", n:1, label:"Quel est votre prénom ?", type:"text", required:true },
     { id:"q02_age", n:2, label:"Quel est votre âge ?", type:"radio", required:true,
-      options:["25-34 ans","35-44 ans","45-54 ans","55-64 ans","65 ans et plus"] },
+      options:["Moins de 25 ans", "25-34 ans","35-44 ans","45-54 ans","55-64 ans","65 ans et plus"] },
     { id:"q03_situation", n:3, label:"Quelle est votre situation familiale ?", type:"radio", required:true, other:true,
       options:["En couple avec enfant(s)","Parent solo avec enfant(s)","En couple sans enfant","Célibataire"] },
     { id:"q04_age_enfants", n:4, label:"Quel âge ont vos enfants ?", type:"text", hint:"Par exemple : 5 ans, 8 ans, 12 ans", showIf:hasKids },
@@ -142,8 +142,10 @@ const STEPS = [
       options:["Grande ville (Paris, Lyon, Marseille…)","Ville moyenne","Banlieue","Zone rurale"] }
   ]},
   { name: "Pourquoi êtes-vous ici ?", qs: [
-    { id:"q06_pourquoi", n:6, label:"Pourquoi avez-vous accepté de répondre à ce questionnaire ?", type:"textarea" },
+    { id:"q06_pourquoi", n:6, label:"Pourquoi avez-vous accepté de répondre à ce questionnaire ?", type:"radio", required:true, other:true,
+      options:["Ça m'intéresse vraiment, j'ai besoin de solutions","Par curiosité","On me l'a demandé","Pour aider / rendre service"] },
     { id:"q07_urgence", n:7, label:"Sur une échelle de 1 à 10, à quel point est-ce urgent pour vous de changer cette situation ?", type:"scale", required:true,
+      showIf:a => a.q06_pourquoi === "Ça m'intéresse vraiment, j'ai besoin de solutions",
       ends:["1 · Je peux attendre","10 · C'est critique, je dois agir maintenant"] }
   ]},
   { name: "Votre situation actuelle", qs: [
