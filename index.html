@@ -180,6 +180,16 @@ const STEPS = [
         {k:"echanges_familles", t:"Échanger avec d'autres familles"},
         {k:"exercices_hebdo", t:"De la théorie (motivante !) sur comment s'y prendre"},
         {k:"rencontres", t:"Des rencontres motivantes (stages, journées…)"}
+      ] },
+    { id:"q20b_module_couple", n:"20b", label:"En parallèle du programme en famille, à quel point un module en couple vous intéresserait-il ?", type:"scale", required:true,
+      ends:["1 · Pas du tout","10 · Énormément"],
+      showIf:a => ["En couple avec enfant(s)","En couple sans enfant"].includes(a.q03_situation) },
+    { id:"q20c_module_solo", n:"20c", label:"Et un module en solo, rien que pour vous ?", type:"scale", required:true,
+      ends:["1 · Pas du tout","10 · Énormément"] },
+    { id:"q20d_module_attentes", n:"20d", label:"Qu'attendriez-vous de ce module ?", type:"textarea",
+      hint:"Par exemple : retrouver de l'énergie, du temps pour le couple, préparer un défi sportif…",
+      showIf:a => +a.q20b_module_couple >= 6 || +a.q20c_module_solo >= 6 }
+  ]},
       ] }
   ]},
   { name: "Votre budget et vos attentes", qs: [
